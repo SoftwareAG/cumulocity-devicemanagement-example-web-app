@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "c8ycli server -u http://demo.cumulocity.com",
+    "start": "c8ycli server -u http://mbay.eu-latest.cumulocity.com",
     "build": "c8ycli build",
-    "deploy": "c8ycli deploy -u http://demo.cumulocity.com"
+    "deploy": "c8ycli deploy -u http://mbay.eu-latest.cumulocity.com"
   },
   "keywords": [],
   "author": "",
