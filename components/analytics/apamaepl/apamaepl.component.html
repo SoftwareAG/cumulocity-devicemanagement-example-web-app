@@ -1,0 +1,57 @@
+<div class="card-group interact-grid">
+  <div *ngFor="let model of epl_data">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-actions">
+          <div class="dropdown settings" dropdown>
+            <button
+              type="button"
+              title="Actions"
+              dropdownToggle
+              class="dropdown-toggle c8y-dropdown"
+            >
+              <i c8yIcon="ellipsis-v" class="fa fw fa-ellipsis-v"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right" *dropdownMenu>
+              <li>
+              <a href="{{this.eplUrl}}#/eplapps" target="_blank">
+                <i c8yIcon="edit"></i> Edit
+              </a>
+            </li>            
+            </ul>
+          </div>
+        </div>
+        <!-- Card Header -->
+        <div class="card-header separator">
+          <div class="card-icon">
+            <i class="c8y-icon c8y-icon-analytic-model c8y-icon-duocolor"></i>
+          </div>
+          <div class="text-truncate card-title" title="Analyse">
+            {{ model.name }}
+          </div>
+
+        </div>
+        <!-- Card Body -->
+        <div class="card-block text-left p-4">
+       <!--   <p class="card-text">id: {{ model.id }}</p>          
+          <p class="card-text">Status: {{ model.state }}</p>-->
+          <b class="card-text">Description: </b>
+          <p class="card-text">{{ model.description }}</p>
+        </div>
+        <!-- Body end -->
+
+        <!-- Card Footer -->
+        <div class="card-footer separator text-right">
+          <label class="c8y-switch" title="Switch on/off">
+            Active
+            <input #myCheckbox type="checkbox" 
+                [checked]="isModelStatusActive(model)"
+                (click)="switchModelOnOff(model,$event,myCheckbox.checked)" id="switcher" />
+            <span></span>
+          </label>
+        </div>
+        <!-- Footer end -->
+      </div>
+    </div>
+  </div>
+</div>

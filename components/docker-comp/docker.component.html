@@ -1,0 +1,148 @@
+<div class="row">
+  <h1>List containers</h1>
+</div>
+
+<div class="row">
+  <div class="card-group interact-grid">
+    <div *ngFor="let container of containers">
+      <div class="col-md-3">
+        <div
+          class="card mx-auto"
+          name="my-card"
+        >
+        <div class="card-actions">
+          <div class="dropdown settings" dropdown>
+            <button
+              type="button"
+              title="Actions"
+              dropdownToggle
+              class="dropdown-toggle c8y-dropdown"
+            >
+              <i c8yIcon="ellipsis-v" class="fa fw fa-ellipsis-v"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right" *dropdownMenu>
+              <li>
+                <a style="cursor: pointer;">
+                  <i c8yIcon="cogs"></i> Configure
+                </a>
+              <a (click)="remove(container)" style="cursor: pointer;">
+                <i c8yIcon="remove"></i> Remove
+              </a>
+            </li>            
+            </ul>
+          </div>
+        </div>
+          <div class="card-header separator">
+            <img
+              src="https://banner2.cleanpng.com/20180624/ury/kisspng-docker-computer-icons-jenkins-software-testing-5b2fad179badc5.8306641715298511596377.jpg"
+              height="42px"
+              class="d-inline-block align-top"
+              alt=""
+            />
+            <h4
+              class="card-title pl-4"
+              style="text-transform: uppercase; padding-left: 0.5em"
+            >
+              {{ container.name }}
+            </h4>
+          </div>
+          <div class="card-block text-left p-4">
+            <p class="card-text"><b>CPU:</b> {{ container.cpu }}%</p>
+            <p class="card-text"><b>RAM:</b> {{ container.memory }}</p>
+            <p class="card-text">
+              <b>Container ID:</b> {{ container.containerID }}
+            </p>
+            <p class="card-text"><b>Status:</b> {{ container.status }}</p>
+          </div>
+          <div class="card-footer text-right">
+            <button
+              id="restart-btn"
+              (click)="start(container)"
+              type="button"
+              class="btn btn-outline-secondary py-6"
+            >
+              <i class="fa fa-play-circle-o"></i> Start
+            </button>
+            <button
+              id="restart-btn"
+              (click)="stop(container)"
+              type="button"
+              class="btn btn-outline-secondary py-6"
+            >
+              <i class="fa fa-stop"></i> Stop
+            </button>
+            <button
+              id="restart-btn"
+              (click)="restart(container)"
+              type="button"
+              class="btn btn-outline-secondary py-6"
+            >
+              <i class="fa fa-refresh"></i> Restart
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div
+        class="card"
+        (click)="displayModal()"
+        name="add-card"
+        style="
+          height: 16em;
+          width: 16em;
+          background-color: grey;
+          object-fit: fill;
+          cursor: pointer;
+        "
+      >
+        <div
+          class="card-block text-center justify-content-center"
+          style="font-size: 5em; padding-top: 1em"
+        >
+          <p class="card-text">
+            <b>+</b>
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- The Modal -->
+    <div id="docker-modal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+        <span id="closeModal" class="close" (click)="closeModal()"
+          >&times;</span
+        >
+        <div class="modal-header">
+          <h2>Container creation</h2>
+        </div>
+        <div class="modal-body">
+          <form name="myForm"> 
+            <label for="fname">Name:</label><br>
+            <input type="text" id="fname" name="fname"><br>
+            <label for="lname">Image:</label><br>
+            <input type="text" id="fimage" name="fimage"><br>
+            <label for="fname">Port mapping:</label><br>
+            <input type="text" id="fportmap" name="fportmap"><br>
+          </form> 
+        </div>
+        <div class="modal-footer">
+          <button
+              type="button"
+              class="btn btn-outline-primary py-5"
+              (click)="closeModal()"
+            >
+              Cancel
+            </button>
+            <button
+            type="button"
+            class="btn btn-primary py-5"
+            (click)="createContainer()"
+          >
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
