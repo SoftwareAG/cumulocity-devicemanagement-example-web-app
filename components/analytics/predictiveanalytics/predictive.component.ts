@@ -5,14 +5,14 @@ import { OperationService, IOperation, FetchClient } from '@c8y/client';
 import { Alert, AlertService } from '@c8y/ngx-components';
 
 @Component({
-    selector: 'app-analytics-builder',
-    templateUrl: "./apamaAB.component.html",
-    styleUrls: ['./apamaAB.component.css']
+    selector: 'app-predictive-analytics',
+    templateUrl: "./predictive.component.html",
+    styleUrls: ['./predictive.component.css']
   })
 
-  export class AnalyticsBuilderComponent implements OnInit {
-    aBuilder_models: any;
-    aBuilder_data: any;
+  export class PredictiveAnalyticsComponent implements OnInit {
+    ML_models: any;
+    ML_data: any;
     
     deviceId: string;
 
@@ -25,15 +25,29 @@ import { Alert, AlertService } from '@c8y/ngx-components';
         var data = this.route.snapshot.parent.data.contextData;
         this.deviceId = data["id"];
 
-        this.fetchABModels();
+        this.fetchMLModels();
         this.fetchThinEdgeModel();
          
      }
 
-     fetchABModels(){
-      this.fetchClient.fetch('service/cep/analyticsbuilder').then((response) => { //try...
+     fetchMLModels(){
+      this.ML_data = [];
+      this.fetchClient.fetch('/service/zementis/models').then((response) => { //try...
         response.json().then( (data) => {
-            this.aBuilder_data = data["analyticsBuilderModelRepresentations"];
+            //this.ML_data = data["models"];
+            for(var i = 0; i < data["models"].length; i++) {
+              this.fetchClient.fetch('/service/zementis/model/' + data["models"][i]).then((response) => { //try...
+                response.json().then( (model) => {
+                    console.log(model);
+                    this.ML_data.push(model);
+  
+                });  
+
+              } ,(error) => { //...catch
+                 console.log(error);
+              }  ); 
+            }
+            
         } );  
 
      } ,(error) => { //...catch
@@ -46,7 +60,7 @@ import { Alert, AlertService } from '@c8y/ngx-components';
         (response) => {
           //try...
           response.json().then((data) => {
-            this.aBuilder_models = data["c8y_ThinEdge_Model"];     
+            this.ML_models = data["c8y_ThinEdge_Model"];     
           //  console.log(this.epl_models); //thin edge models
           });
         },
@@ -58,8 +72,8 @@ import { Alert, AlertService } from '@c8y/ngx-components';
      }
 
      isModelStatusActive(model):boolean{
-        for(var i = 0; i < this.aBuilder_models.length; i++) {
-          if (model.name == this.aBuilder_models[i].name){
+        for(var i = 0; i < this.ML_models.length; i++) {
+          if (model.name == this.ML_models[i].name){
             return true;
           }
         }
@@ -71,16 +85,16 @@ import { Alert, AlertService } from '@c8y/ngx-components';
         //console.log(trigger); // {} 
         var isActive = this.isModelStatusActive(model);
         
-        const objIndex = this.aBuilder_data.findIndex((obj => obj.id == model.id));
+        const objIndex = this.ML_data.findIndex((obj => obj.id == model.id));
         
         if (trigger && !isActive){
           console.log("switch ON");
           this.switchModelOn(model);
-          this.aBuilder_data[objIndex].state = "active";
+          this.ML_data[objIndex].state = "active";
         }else if(!trigger && isActive){
           console.log("switch OFF");
           this.switchModelOff(model);
-          this.aBuilder_data[objIndex].state = "inactive";
+          this.ML_data[objIndex].state = "inactive";
         }else if ((trigger && isActive) || (!trigger && !isActive) ){
           console.log("Try to prevent check.");
           event.preventDefault();
@@ -93,7 +107,7 @@ import { Alert, AlertService } from '@c8y/ngx-components';
             deviceId: this.deviceId,
             c8y_ThinEdge_Model: {
               name: model.name,
-              type: "AnalyticsBuilder",
+              type: "PredictiveAnalytics",
               id: model.id,
               order: "load"
             },
@@ -106,7 +120,7 @@ import { Alert, AlertService } from '@c8y/ngx-components';
             deviceId: this.deviceId,
             c8y_ThinEdge_Model: {
               name: model.name,
-              type: "AnalyticsBuilder",
+              type: "PredictiveAnalytics",
               id: model.id,
               order: "delete"
             },
