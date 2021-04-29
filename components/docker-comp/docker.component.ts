@@ -90,7 +90,7 @@ export class DockerComponent implements OnInit {
     };
     const detail$ = this.invSvc.detail$(this.deviceId, realtimeOps);
     detail$.subscribe((data) => {
-      console.log(data)
+      //console.log(data)
       this.containers = data[0]["c8y_Docker"];
       this.available = data[0]["c8y_Availability"];
       //console.log("System is " + this.available.status);
