@@ -2,7 +2,7 @@ import { elementEventFullName } from "@angular/compiler/src/view_compiler/view_c
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 
-import { OperationService, IOperation, FetchClient } from "@c8y/client";
+import { OperationService, IOperation, FetchClient, InventoryService, RealtimeAction} from "@c8y/client";
 import { Alert, AlertService } from "@c8y/ngx-components";
 import { interval } from "rxjs";
 
@@ -25,7 +25,8 @@ export class DockerComponent implements OnInit {
     public route: ActivatedRoute,
     private ops: OperationService,
     private alert: AlertService,
-    private fetchClient: FetchClient
+    private fetchClient: FetchClient,
+    private invSvc: InventoryService
   ) {
     this.available = new Object();
   }
@@ -84,13 +85,23 @@ export class DockerComponent implements OnInit {
   }
 
   deviceFetchClient() {
+    const realtimeOps = {
+      realtime: true,
+    };
+    const detail$ = this.invSvc.detail$(this.deviceId, realtimeOps);
+    detail$.subscribe((data) => {
+      console.log(data)
+      this.containers = data[0]["c8y_Docker"];
+      this.available = data[0]["c8y_Availability"];
+      //console.log("System is " + this.available.status);
+    });
     this.fetchClient.fetch("inventory/managedObjects/" + this.deviceId).then(
       (response) => {
         //try...
         response.json().then((data) => {
           this.containers = data["c8y_Docker"];
           this.available = data["c8y_Availability"];
-          console.log("System is " + this.available.status);
+          //console.log("System is " + this.available.status);
         });
       },
       (error) => {
