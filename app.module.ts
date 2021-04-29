@@ -2,16 +2,17 @@ import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule as NgRouterModule } from '@angular/router';
 import { UpgradeModule as NgUpgradeModule } from '@angular/upgrade/static';
-
 import { CoreModule, RouterModule, HOOK_ONCE_ROUTE, ViewContext } from '@c8y/ngx-components';
 import { AssetsNavigatorModule } from '@c8y/ngx-components/assets-navigator';
-import { DeviceConfigurationModule } from '@c8y/ngx-components/device-configuration';
-import { DeviceListsModule } from '@c8y/ngx-components/device-lists';
+import { DeviceGridExampleModule } from '@c8y/ngx-components/device-grid-example';
+import { DeviceProfileModule } from '@c8y/ngx-components/device-profile';
+import { OperationsModule } from '@c8y/ngx-components/operations';
 import { ImpactProtocolModule } from '@c8y/ngx-components/protocol-impact';
 import { OpcuaProtocolModule } from '@c8y/ngx-components/protocol-opcua';
 import { RepositoryModule } from '@c8y/ngx-components/repository';
 import { TrustedCertificatesModule } from '@c8y/ngx-components/trusted-certificates';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { BinaryFileDownloadModule } from '@c8y/ngx-components/binary-file-download';
+import { LoraProtocolModule } from '@c8y/ngx-components/protocol-lora';
 
 import { DockerComponent } from './components/docker-comp/docker.component';
 import { AnalyticsComponent } from './components/analytics/analytics.component';
@@ -43,12 +44,14 @@ import {
     OpcuaProtocolModule,
     ImpactProtocolModule,
     TrustedCertificatesModule,
-    DeviceConfigurationModule,
-    DeviceListsModule,
+    DeviceGridExampleModule,
+    OperationsModule,
     NgUpgradeModule,
     DashboardUpgradeModule,
     RepositoryModule,
-    BsDropdownModule
+    DeviceProfileModule,
+    LoraProtocolModule,
+    BinaryFileDownloadModule
   ],
   declarations: [
     AnalyticsComponent, 
