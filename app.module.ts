@@ -5,6 +5,7 @@ import { UpgradeModule as NgUpgradeModule } from '@angular/upgrade/static';
 import { CoreModule, RouterModule, HOOK_ONCE_ROUTE, ViewContext } from '@c8y/ngx-components';
 import { AssetsNavigatorModule } from '@c8y/ngx-components/assets-navigator';
 import { DeviceGridExampleModule } from '@c8y/ngx-components/device-grid-example';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { DeviceProfileModule } from '@c8y/ngx-components/device-profile';
 import { OperationsModule } from '@c8y/ngx-components/operations';
 import { ImpactProtocolModule } from '@c8y/ngx-components/protocol-impact';
@@ -43,6 +44,7 @@ import {
     }),
     OpcuaProtocolModule,
     ImpactProtocolModule,
+    BsDropdownModule,
     TrustedCertificatesModule,
     DeviceGridExampleModule,
     OperationsModule,
