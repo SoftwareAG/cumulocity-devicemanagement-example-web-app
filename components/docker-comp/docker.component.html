@@ -1,6 +1,11 @@
 <div class="row">
   <h1>List containers</h1>
 </div>
+<br>
+<div class="row">
+  <c8y-single-operation [operation]="operation"></c8y-single-operation>
+</div>
+<br>
 
 <div class="row">
   <div class="card-group interact-grid">
@@ -22,9 +27,9 @@
             </button>
             <ul class="dropdown-menu dropdown-menu-right" *dropdownMenu>
               <li>
-                <a style="cursor: pointer;">
-                  <i c8yIcon="cogs"></i> Configure
-                </a>
+              <a style="cursor: pointer;">
+                <i c8yIcon="cogs"></i> Configure
+              </a>
               <a (click)="remove(container)" style="cursor: pointer;">
                 <i c8yIcon="remove"></i> Remove
               </a>

@@ -2,8 +2,8 @@ import { elementEventFullName } from "@angular/compiler/src/view_compiler/view_c
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 
-import { OperationService, IOperation, FetchClient, InventoryService, RealtimeAction} from "@c8y/client";
-import { Alert, AlertService } from "@c8y/ngx-components";
+import { OperationService, IOperation, FetchClient, InventoryService, RealtimeAction, Realtime} from "@c8y/client";
+import { Alert, AlertService} from "@c8y/ngx-components";
 import { interval } from "rxjs";
 
 @Component({
@@ -14,7 +14,9 @@ import { interval } from "rxjs";
 export class DockerComponent implements OnInit {
   containers: any;
   deviceId: string;
+  operation: IOperation;
   available: any;
+  realtime: any;
 
   isAvailable: boolean;
 
@@ -26,7 +28,7 @@ export class DockerComponent implements OnInit {
     private ops: OperationService,
     private alert: AlertService,
     private fetchClient: FetchClient,
-    private invSvc: InventoryService
+    private invSvc: InventoryService,
   ) {
     this.available = new Object();
   }
@@ -38,6 +40,7 @@ export class DockerComponent implements OnInit {
     this.deviceFetchClient();
     this.modal = document.getElementById("docker-modal");
     this.spanClose = document.getElementById("closeModal");
+    this.operation = null;
   }
 
   ngAfterViewChecked() {
@@ -86,7 +89,7 @@ export class DockerComponent implements OnInit {
 
   deviceFetchClient() {
     const realtimeOps = {
-      realtime: true,
+      realtime: true
     };
     const detail$ = this.invSvc.detail$(this.deviceId, realtimeOps);
     detail$.subscribe((data) => {
@@ -95,6 +98,13 @@ export class DockerComponent implements OnInit {
       this.available = data[0]["c8y_Availability"];
       //console.log("System is " + this.available.status);
     });
+    this.realtime = new Realtime(this.fetchClient);
+    const subscription = this.realtime.subscribe('/operations/'+this.deviceId, (data) => {
+      if (data.data.data['c8y_Docker'] != undefined) {
+        this.operation = data.data.data;
+      }
+    });
+
     this.fetchClient.fetch("inventory/managedObjects/" + this.deviceId).then(
       (response) => {
         //try...
@@ -121,20 +131,18 @@ export class DockerComponent implements OnInit {
       },
       description: status + " container '" + item.name + "' on thin edge",
     };
-    console.log(
-      `Container '${item.name}' send operation '${status}' to deviceId ${this.deviceId}`
-    );
     //    this.ops.create(dockerOperation);
     this.ops.create(dockerOperation).then(
       (result) => {
+        this.operation = result.data;
         const myAlert: Alert = {
-          text: "Create operation '" + status + "'.",
-          type: "info",
+          text: "Docker Update Operation sent to Device",
+          type: "success",
           timeout: 8000,
         };
         this.alert.add(myAlert);
-        console.log(result);
-        console.log(myAlert);
+        //console.log(result);
+        //console.log(myAlert);
       },
       (error) => {
         const myAlert: Alert = {
@@ -162,20 +170,16 @@ export class DockerComponent implements OnInit {
       },
       description: status + " container '" + item.name + "' on thin edge",
     };
-    console.log(
-      `Container '${item.name}' send operation '${status}' to deviceId ${this.deviceId}`
-    );
     //    this.ops.create(dockerOperation);
     this.ops.create(dockerOperation).then(
       (result) => {
-        const myAlert: Alert = {
-          text: "Create operation '" + status + "'.",
-          type: "info",
+        this.operation = result.data;
+          const myAlert: Alert = {
+          text: "Docker Create Operation sent to Device",
+          type: "success",
           timeout: 8000,
         };
         this.alert.add(myAlert);
-        console.log(result);
-        console.log(myAlert);
       },
       (error) => {
         const myAlert: Alert = {
@@ -213,16 +217,14 @@ export class DockerComponent implements OnInit {
         alert("Image must be filled out");
       }
     }
-    console.log(document.forms["myForm"]);
     let item = {
       name : xName,
       image: xImage,
       ports: xPorts
     }
-    console.log(item);
 
     const myAlert: Alert = {
-      text: "Create new container + '" + item.name + "'...",
+      text: "Creating new container + '" + item.name + "'...",
       type: "info",
       timeout: 8000,
     };
